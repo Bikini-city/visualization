@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export const Container = styled.div`
   position: relative;
-  height: calc(100% - 8rem);
+  height: 100%;
 `;
 
 export const MapContainer = styled.div`

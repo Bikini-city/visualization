@@ -9,7 +9,9 @@ function GlobalStyle(): React.ReactElement {
           box-sizing: border-box;
         }
         html,
-        body {
+        body,
+        #root {
+          margin: 0;
           height: 100%;
           font-size: 62.5%;
         }
