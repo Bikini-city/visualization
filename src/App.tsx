@@ -1,8 +1,8 @@
 import React from 'react';
-import Map from './components/UI/Map';
+import MainTemplate from './components/template/mainTemplate';
 
 function App() {
-  return <Map />;
+  return <MainTemplate />;
 }
 
 export default App;
