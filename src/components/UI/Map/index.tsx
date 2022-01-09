@@ -1,0 +1,49 @@
+import React, { useEffect, useRef } from 'react';
+import mapboxgl from 'mapbox-gl';
+
+import 'mapbox-gl/dist/mapbox-gl.css';
+import * as Style from './styled';
+
+mapboxgl.accessToken = process.env.MAPBOX_KEY as string;
+
+const LNG = -86.89871737888747;
+const LAT = 40.41866254968954;
+const ZOOM = 12;
+
+interface MapProps {
+  children?: React.ReactElement;
+}
+
+function Map({ children }: MapProps) {
+  const mapRef = useRef<any>(null);
+
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: mapRef.current,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [LNG, LAT],
+      zoom: ZOOM,
+    });
+
+    map.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: {
+          enableHighAccuracy: true,
+        },
+        trackUserLocation: true,
+      }),
+      'bottom-right',
+    );
+  }, []);
+
+  return (
+    <Style.Container>
+      <Style.MapContainer ref={mapRef}>
+        <Style.SearchBox id="search-bar" />
+        {children}
+      </Style.MapContainer>
+    </Style.Container>
+  );
+}
+
+export default Map;

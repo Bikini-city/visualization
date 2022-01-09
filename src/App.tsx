@@ -1,12 +1,8 @@
 import React from 'react';
-import styled from '@emotion/styled';
-
-const Div = styled.div`
-  color: blue;
-`;
+import Map from './components/UI/Map';
 
 function App() {
-  return <Div>hello-world</Div>;
+  return <Map />;
 }
 
 export default App;
