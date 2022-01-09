@@ -6,6 +6,7 @@ export const Container = styled.nav`
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #000000;
   z-index: 500;
+  background-color: #fff;
+  border-right: 1px solid #9e7715;
 `;
