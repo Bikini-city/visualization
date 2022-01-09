@@ -7,6 +7,7 @@ function GlobalStyle(): React.ReactElement {
       styles={css`
         * {
           box-sizing: border-box;
+          font-family: 'Comfortaa', cursive;
         }
         html,
         body,
