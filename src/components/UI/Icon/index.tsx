@@ -5,14 +5,15 @@ import * as Style from './styled';
 interface IconType {
   icon: keyof typeof Icons;
   width: string;
+  color: string;
 }
 
-function Icon({ icon, width }: IconType) {
+function Icon({ icon, width, color = '#000' }: IconType) {
   const SVGIcons = Icons[icon];
 
   return (
     <Style.Container width={width}>
-      <SVGIcons />
+      <SVGIcons color={color} />
     </Style.Container>
   );
 }
