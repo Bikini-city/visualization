@@ -20,7 +20,7 @@ function Map({ children }: MapProps) {
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapRef.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: 'mapbox://styles/mapbox/satellite-v9',
       center: [LNG, LAT],
       zoom: ZOOM,
     });
