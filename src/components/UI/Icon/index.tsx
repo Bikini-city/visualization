@@ -5,7 +5,7 @@ import * as Style from './styled';
 interface IconType {
   icon: keyof typeof Icons;
   width: string;
-  color: string;
+  color?: string;
 }
 
 function Icon({ icon, width, color = '#000' }: IconType) {
