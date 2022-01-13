@@ -18,7 +18,7 @@ function MainTemplate() {
       <Header />
       <Nav screen={screen} changeScreen={changeScreen} />
       {screen === 'date' && <ControlBox />}
-      <Map />
+      <Map isCompare={screen === 'compare'} />
     </>
   );
 }

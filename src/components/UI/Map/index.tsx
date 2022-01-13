@@ -1,10 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import mapboxgl from 'mapbox-gl';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Compare from 'mapbox-gl-compare';
+import ReactMapGL, { MapRef } from 'react-map-gl';
 
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as Style from './styled';
-
-mapboxgl.accessToken = process.env.MAPBOX_KEY as string;
 
 const LNG = -86.89871737888747;
 const LAT = 40.41866254968954;
@@ -12,36 +11,65 @@ const ZOOM = 12;
 
 interface MapProps {
   children?: React.ReactElement;
+  isCompare: boolean;
 }
 
-function Map({ children }: MapProps) {
-  const mapRef = useRef<any>(null);
+function Map({ children, isCompare }: MapProps) {
+  const [viewport, setViewport] = useState({
+    latitude: LAT,
+    longitude: LNG,
+    zoom: ZOOM,
+  });
+  const beforeMapRef = useRef<MapRef>(null);
+  const currentMapRef = useRef<MapRef>(null);
+
+  const handleViewportChange = useCallback((newViewport) => setViewport(newViewport), []);
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapRef.current,
-      style: 'mapbox://styles/mapbox/satellite-v9',
-      center: [LNG, LAT],
-      zoom: ZOOM,
-    });
+    if (isCompare && beforeMapRef.current && currentMapRef.current) {
+      const beforeMap = beforeMapRef.current.getMap();
+      const afterMap = currentMapRef.current.getMap();
+      const map = new Compare(beforeMap, afterMap, '#comparison-container');
 
-    map.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        trackUserLocation: true,
-      }),
-      'bottom-right',
-    );
-  }, []);
+      return () => map.remove();
+    }
+    return () => {};
+  }, [isCompare]);
+
+  const style = {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+  };
 
   return (
-    <Style.Container>
-      <Style.MapContainer ref={mapRef}>
-        <Style.SearchBox id="search-bar" />
-        {children}
-      </Style.MapContainer>
+    <Style.Container id="comparison-container">
+      <ReactMapGL
+        ref={beforeMapRef}
+        latitude={viewport.latitude}
+        longitude={viewport.longitude}
+        zoom={viewport.zoom}
+        width="100%"
+        height="100%"
+        style={style}
+        onViewportChange={handleViewportChange}
+        mapStyle="mapbox://styles/mapbox/dark-v10"
+        mapboxApiAccessToken={process.env.MAPBOX_KEY}
+      />
+      <ReactMapGL
+        ref={currentMapRef}
+        latitude={viewport.latitude}
+        longitude={viewport.longitude}
+        zoom={viewport.zoom}
+        width="100%"
+        height="100%"
+        style={style}
+        onViewportChange={handleViewportChange}
+        mapStyle="mapbox://styles/mapbox/satellite-v9"
+        mapboxApiAccessToken={process.env.MAPBOX_KEY}
+      />
+      {children}
     </Style.Container>
   );
 }
