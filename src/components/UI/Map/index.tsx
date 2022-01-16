@@ -12,9 +12,11 @@ const ZOOM = 12;
 interface MapProps {
   children?: React.ReactElement;
   isCompare: boolean;
+  getBeforeMap: (df: MapRef) => void;
+  getCurrentMap: (df: MapRef) => void;
 }
 
-function Map({ children, isCompare }: MapProps) {
+function Map({ children, isCompare, getBeforeMap, getCurrentMap }: MapProps) {
   const [viewport, setViewport] = useState({
     latitude: LAT,
     longitude: LNG,
@@ -24,6 +26,18 @@ function Map({ children, isCompare }: MapProps) {
   const currentMapRef = useRef<MapRef>(null);
 
   const handleViewportChange = useCallback((newViewport) => setViewport(newViewport), []);
+
+  useEffect(() => {
+    if (currentMapRef.current) {
+      getCurrentMap(currentMapRef.current);
+    }
+  }, [currentMapRef.current]);
+
+  useEffect(() => {
+    if (beforeMapRef.current) {
+      getBeforeMap(beforeMapRef.current);
+    }
+  }, [beforeMapRef.current]);
 
   useEffect(() => {
     if (isCompare && beforeMapRef.current && currentMapRef.current) {
